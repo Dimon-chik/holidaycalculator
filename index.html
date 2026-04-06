@@ -8,31 +8,30 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
         body { font-family: 'Inter', system-ui, sans-serif; }
-        .table-input { width: 60px; text-align: center; }
-        .animate-pop { animation: pop 0.3s ease-out; }
-        @keyframes pop { 0% { transform: scale(0.95); } 100% { transform: scale(1); } }
-        .dark .bg-white { background-color: #1f2937 !important; }
-        .dark .text-gray-700 { color: #e5e7eb !important; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-indigo-950 to-violet-950 dark:from-slate-950 dark:to-zinc-950 text-slate-900 dark:text-slate-100 min-h-screen py-8 transition-colors">
-    <div class="max-w-5xl mx-auto bg-white dark:bg-slate-800 shadow-2xl rounded-3xl overflow-hidden">
-        <div class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white p-8 text-center relative">
-            <button onclick="toggleTheme()" class="absolute top-8 right-8 text-white text-2xl">🌗</button>
+<body class="bg-zinc-100 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 min-h-screen py-8 transition-colors">
+    <div class="max-w-6xl mx-auto bg-white dark:bg-zinc-900 shadow-2xl rounded-3xl overflow-hidden">
+        <!-- Заголовок -->
+        <div class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white p-8 text-center relative">
+            <button onclick="toggleTheme()" 
+                    class="absolute top-8 right-8 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-2xl text-sm font-medium flex items-center gap-2 transition">
+                🌗 Переключить тему
+            </button>
             <h1 class="text-4xl font-bold">🗓️ Каникулы-калькулятор 2026</h1>
-            <p class="mt-2 opacity-90">Твоё расписание + официальные праздники</p>
+            <p class="mt-2 opacity-90">Твоё расписание + все праздники</p>
         </div>
 
         <div class="p-8 space-y-10">
             <!-- Даты -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-sm font-medium mb-1">Сегодня</label>
-                    <input id="today" type="date" class="w-full border border-slate-300 dark:border-slate-600 rounded-2xl px-4 py-3 focus:outline-none focus:border-violet-500">
+                    <label class="block text-sm font-medium mb-2">Сегодня</label>
+                    <input id="today" type="date" class="w-full bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-2xl px-5 py-4 focus:outline-none focus:border-violet-500 text-lg">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-1">Начало каникул</label>
-                    <input id="vacation" type="date" class="w-full border border-slate-300 dark:border-slate-600 rounded-2xl px-4 py-3 focus:outline-none focus:border-violet-500">
+                    <label class="block text-sm font-medium mb-2">Начало каникул</label>
+                    <input id="vacation" type="date" class="w-full bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-2xl px-5 py-4 focus:outline-none focus:border-violet-500 text-lg">
                 </div>
             </div>
 
@@ -40,93 +39,109 @@
             <div>
                 <div class="flex justify-between items-center mb-3">
                     <label class="block text-sm font-medium">Праздники и выходные 2026</label>
-                    <button onclick="load2026Holidays()" class="text-sm bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-2xl transition">Загрузить все праздники 2026</button>
+                    <button onclick="load2026Holidays()" 
+                            class="bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-2xl text-sm font-medium transition">
+                        Загрузить все праздники 2026
+                    </button>
                 </div>
                 <div class="flex gap-3">
-                    <input id="holidayDate" type="date" class="flex-1 border border-slate-300 dark:border-slate-600 rounded-2xl px-4 py-3 focus:outline-none focus:border-violet-500">
-                    <button onclick="addHoliday()" class="bg-violet-600 text-white px-6 rounded-2xl font-medium hover:bg-violet-700 transition">+ Добавить</button>
+                    <input id="holidayDate" type="date" 
+                           class="flex-1 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-2xl px-5 py-4 focus:outline-none focus:border-violet-500">
+                    <button onclick="addHoliday()" 
+                            class="bg-violet-600 text-white px-8 rounded-2xl font-medium hover:bg-violet-700 transition">+ Добавить</button>
                 </div>
-                <div id="holidaysList" class="mt-4 flex flex-wrap gap-2"></div>
+                <div id="holidaysList" class="mt-5 flex flex-wrap gap-3"></div>
             </div>
 
-            <!-- Расписание уже зашито — показываем только для редактирования -->
+            <!-- Расписание -->
             <div>
-                <h2 class="text-lg font-semibold mb-4">Твоё расписание (можно редактировать)</h2>
-                <div id="timetable" class="overflow-x-auto"></div>
+                <h2 class="text-xl font-semibold mb-4">Твоё расписание (включи/выключи уроки)</h2>
+                <div id="timetable" class="overflow-x-auto border border-zinc-200 dark:border-zinc-700 rounded-3xl p-2 bg-white dark:bg-zinc-900"></div>
             </div>
 
             <!-- Кнопка расчёта -->
             <button onclick="calculate()" 
-                    class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-6 rounded-3xl text-2xl font-bold hover:from-violet-700 hover:to-indigo-700 transition-all shadow-xl flex items-center justify-center gap-3">
-                <span>Рассчитать до каникул</span>
-                <span class="text-3xl">→</span>
+                    class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white py-6 rounded-3xl text-2xl font-bold transition-all shadow-xl">
+                Рассчитать до каникул →
             </button>
 
             <!-- Результат -->
-            <div id="result" class="hidden bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 rounded-3xl p-8"></div>
+            <div id="result" class="hidden bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-300 dark:border-emerald-700 rounded-3xl p-8"></div>
         </div>
     </div>
 
     <script>
+        // === ИНИЦИАЛИЗАЦИЯ TAILWIND ===
+        function initTailwind() {
+            return {
+                config(userConfig = {}) {
+                    return {
+                        content: [],
+                        darkMode: 'class',
+                        theme: { extend: {} },
+                        ...userConfig,
+                    }
+                },
+                theme: {
+                    extend: {},
+                },
+            }
+        }
+        document.documentElement.setAttribute('data-tailwind-config', JSON.stringify(initTailwind()))
+
         let subjects = [];
         let timetable = {1: {}, 2: {}, 3: {}, 4: {}, 5: {}};
         let holidays = new Set();
 
-        const weekdayNames = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
-
-        // === ТВОЁ РАСПИСАНИЕ (уже зашито) ===
+        // Твоё расписание (0 или 1 урок)
         function loadMyTimetable() {
-            subjects = [
-                "Классный час", "Русский язык", "Алгебра", "Геометрия", "Физика", "Английский язык",
-                "Физкультура", "Обществознание", "Химия", "Вероятность и статистика", "Литература",
-                "География", "Музыка", "Биология", "История", "Информатика", "ОБЗР", "Труд"
-            ];
+            subjects = ["Классный час","Русский язык","Алгебра","Геометрия","Физика","Английский язык","Физкультура","Обществознание","Химия","Вероятность и статистика","Литература","География","Музыка","Биология","История","Информатика","ОБЗР","Труд"];
 
-            // Понедельник
-            timetable[1] = {"Классный час":1, "Русский язык":1, "Алгебра":1, "Геометрия":1, "Физика":1, "Английский язык":1, "Физкультура":1};
-            // Вторник
-            timetable[2] = {"Обществознание":1, "Химия":1, "Английский язык":1, "Вероятность и статистика":1, "Алгебра":1, "Литература":1, "Физика":1};
-            // Среда
-            timetable[3] = {"География":1, "Музыка":1, "Русский язык":1, "Химия":1, "Биология":1, "История":1};
-            // Четверг
-            timetable[4] = {"История":1, "Биология":1, "Информатика":1, "Физкультура":1, "Геометрия":1, "ОБЗР":1, "География":1};
-            // Пятница
-            timetable[5] = {"Алгебра":1, "Биология":1, "Русский язык":1, "Литература":1, "Труд":1, "Английский язык":1};
+            timetable[1] = {"Классный час":1,"Русский язык":1,"Алгебра":1,"Геометрия":1,"Физика":1,"Английский язык":1,"Физкультура":1};
+            timetable[2] = {"Обществознание":1,"Химия":1,"Английский язык":1,"Вероятность и статистика":1,"Алгебра":1,"Литература":1,"Физика":1};
+            timetable[3] = {"География":1,"Музыка":1,"Русский язык":1,"Химия":1,"Биология":1,"История":1};
+            timetable[4] = {"История":1,"Биология":1,"Информатика":1,"Физкультура":1,"Геометрия":1,"ОБЗР":1,"География":1};
+            timetable[5] = {"Алгебра":1,"Биология":1,"Русский язык":1,"Литература":1,"Труд":1,"Английский язык":1};
         }
 
-        // === ОСНОВНЫЕ ПРАЗДНИКИ 2026 ===
         function load2026Holidays() {
-            const officialHolidays = [
-                "2026-01-01","2026-01-02","2026-01-03","2026-01-04","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-10","2026-01-11",
-                "2026-02-23","2026-03-08","2026-05-01","2026-05-02","2026-05-03","2026-05-09","2026-05-10","2026-05-11",
-                "2026-06-12","2026-06-13","2026-06-14","2026-11-04","2026-12-31"
-            ];
-            officialHolidays.forEach(d => holidays.add(d));
+            const official = ["2026-01-01","2026-01-02","2026-01-03","2026-01-04","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-10","2026-01-11","2026-02-23","2026-03-08","2026-05-01","2026-05-02","2026-05-03","2026-05-09","2026-05-10","2026-05-11","2026-06-12","2026-06-13","2026-06-14","2026-11-04","2026-12-31"];
+            official.forEach(d => holidays.add(d));
             renderHolidays();
-            alert("✅ Загружены все официальные праздники и переносы 2026 года!");
+            alert("✅ Все официальные праздники 2026 загружены!");
         }
 
         function setDefaultDates() {
-            const today = new Date();
-            document.getElementById('today').value = today.toISOString().split('T')[0];
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('today').value = today;
             const vac = new Date();
             vac.setMonth(vac.getMonth() + 2);
             document.getElementById('vacation').value = vac.toISOString().split('T')[0];
         }
 
-        function renderSubjects() { /* не используется, т.к. расписание фиксированное */ }
         function renderTimetable() {
-            let html = `<table class="w-full border-collapse"><thead><tr class="bg-slate-100 dark:bg-slate-700"><th class="px-4 py-3 text-left">День</th>`;
-            subjects.forEach(s => html += `<th class="px-3 py-3 text-center text-xs">${s}</th>`);
+            let html = `<table class="w-full min-w-[1100px] border-collapse"><thead><tr class="bg-zinc-100 dark:bg-zinc-800 sticky top-0">`;
+            html += `<th class="px-6 py-4 text-left font-semibold">День</th>`;
+            subjects.forEach(s => {
+                html += `<th class="px-4 py-4 text-center text-xs font-medium leading-tight">${s}</th>`;
+            });
             html += `</tr></thead><tbody>`;
 
             const days = ['Понедельник','Вторник','Среда','Четверг','Пятница'];
             for (let i = 0; i < 5; i++) {
                 const wd = i + 1;
-                html += `<tr class="border-b"><td class="px-4 py-4 font-medium">${days[i]}</td>`;
+                html += `<tr class="border-b border-zinc-200 dark:border-zinc-700"><td class="px-6 py-5 font-semibold">${days[i]}</td>`;
                 subjects.forEach(s => {
-                    const value = timetable[wd][s] || 0;
-                    html += `<td class="px-3 py-4 text-center"><input type="number" min="0" value="${value}" class="table-input border border-slate-300 dark:border-slate-600 rounded-xl" onchange="updateLesson(${wd}, '${s}', this.value)"></td>`;
+                    const checked = timetable[wd][s] === 1 ? 'checked' : '';
+                    html += `
+                        <td class="px-4 py-5 text-center">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" ${checked} onchange="toggleLesson(${wd}, '${s}', this.checked)"
+                                       class="sr-only peer">
+                                <div class="w-11 h-6 bg-zinc-300 dark:bg-zinc-600 rounded-3xl peer peer-checked:bg-violet-600 transition"></div>
+                                <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-2xl peer-checked:translate-x-5 transition shadow"></div>
+                            </label>
+                        </td>`;
                 });
                 html += `</tr>`;
             }
@@ -134,8 +149,8 @@
             document.getElementById('timetable').innerHTML = html;
         }
 
-        function updateLesson(weekday, subject, value) {
-            timetable[weekday][subject] = parseInt(value) || 0;
+        function toggleLesson(weekday, subject, checked) {
+            timetable[weekday][subject] = checked ? 1 : 0;
         }
 
         function addHoliday() {
@@ -155,9 +170,9 @@
         function renderHolidays() {
             const container = document.getElementById('holidaysList');
             container.innerHTML = Array.from(holidays).sort().map(date => `
-                <div class="bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-2xl px-4 py-2 flex items-center gap-3 text-sm">
+                <div class="inline-flex items-center gap-2 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-2xl px-4 py-2 text-sm">
                     📅 ${date}
-                    <button onclick="removeHoliday('${date}')" class="ml-auto text-red-500 hover:text-red-700 text-xl">×</button>
+                    <button onclick="removeHoliday('${date}')" class="text-red-500 hover:text-red-600 text-lg leading-none">×</button>
                 </div>
             `).join('');
         }
@@ -172,7 +187,7 @@
             today.setHours(0,0,0,0);
             vacation.setHours(0,0,0,0);
 
-            if (vacation <= today) return alert('Каникулы должны быть позже сегодняшнего дня!');
+            if (vacation <= today) return alert('Каникулы должны быть в будущем!');
 
             let schoolDays = 0;
             const totalLessons = {};
@@ -186,40 +201,39 @@
                 if (wd >= 1 && wd <= 5 && !holidays.has(dateStr)) {
                     schoolDays++;
                     subjects.forEach(s => {
-                        const lessons = timetable[wd][s] || 0;
-                        totalLessons[s] += lessons;
+                        if (timetable[wd][s] === 1) totalLessons[s]++;
                     });
                 }
                 current.setDate(current.getDate() + 1);
             }
 
-            // Результат с анимацией
-            let resultHTML = `
-                <div class="text-center animate-pop">
-                    <h2 class="text-4xl font-bold text-emerald-600 dark:text-emerald-400">До каникул осталось</h2>
-                    <div class="text-8xl font-bold text-emerald-700 dark:text-emerald-300 mt-4">${schoolDays}</div>
-                    <p class="text-emerald-600 dark:text-emerald-400 text-xl">учебных дней</p>
+            // Красивый результат
+            let html = `
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold text-emerald-700 dark:text-emerald-400">До каникул осталось</h2>
+                    <div class="text-[5.5rem] font-bold text-emerald-600 dark:text-emerald-300 leading-none mt-3">${schoolDays}</div>
+                    <p class="text-xl text-emerald-600 dark:text-emerald-400 mt-1">учебных дней</p>
                 </div>
                 <div class="mt-10">
-                    <h3 class="font-semibold mb-4 text-lg">Уроки по предметам:</h3>
+                    <h3 class="font-semibold text-lg mb-4">Уроки по предметам:</h3>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">`;
 
             Object.keys(totalLessons).sort().forEach(s => {
-                resultHTML += `
-                    <div class="bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-2xl p-4 flex justify-between items-center">
-                        <span class="font-medium">${s}</span>
-                        <span class="text-2xl font-bold text-violet-600">${totalLessons[s]}</span>
+                html += `
+                    <div class="flex justify-between bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl px-5 py-4">
+                        <span>${s}</span>
+                        <span class="font-bold text-2xl text-violet-600">${totalLessons[s]}</span>
                     </div>`;
             });
 
-            resultHTML += `</div></div>
-                <div class="mt-8 flex gap-4">
-                    <button onclick="window.print()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-3xl font-semibold text-lg transition">📄 Сохранить в PDF</button>
-                    <button onclick="document.getElementById('result').classList.add('hidden')" class="flex-1 border border-slate-300 dark:border-slate-600 py-4 rounded-3xl font-semibold text-lg">Закрыть</button>
+            html += `</div></div>
+                <div class="flex gap-4 mt-10">
+                    <button onclick="window.print()" class="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-semibold text-lg">📄 Сохранить в PDF</button>
+                    <button onclick="document.getElementById('result').classList.add('hidden')" class="flex-1 py-4 border border-zinc-300 dark:border-zinc-600 rounded-3xl font-semibold text-lg">Закрыть</button>
                 </div>`;
 
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = resultHTML;
+            resultDiv.innerHTML = html;
             resultDiv.classList.remove('hidden');
             resultDiv.scrollIntoView({ behavior: "smooth" });
         }
@@ -232,7 +246,7 @@
             loadMyTimetable();
             setDefaultDates();
             renderTimetable();
-            // Добавляем пару праздников по умолчанию
+            // Пример праздников
             holidays.add("2026-05-01");
             holidays.add("2026-06-12");
             renderHolidays();
